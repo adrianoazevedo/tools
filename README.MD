@@ -20,7 +20,7 @@ A calculadora utiliza o \*\*Algoritmo de Luhn\*\* (módulo 10), que é o padrão
 
 Se o seu cartão possui um número ilegível, basta preencher os outros 15 números conhecidos e inserir a letra \*\*`X`\*\* na exata posição do número apagado. O script irá iterar pelas 10 possibilidades (de 0 a 9), aplicando a matemática de validação para encontrar o único dígito que torna o cartão válido.
 
-
+Referência: https://stripe.com/br/resources/more/how-to-use-the-luhn-algorithm-a-guide-in-applications-for-businesses
 
 \## ✨ Funcionalidades
 
