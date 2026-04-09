@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora Segura - Cartão</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 40px; background-color: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); max-width: 450px; margin: auto; }
+        input { font-size: 22px; padding: 12px; width: 90%; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; text-align: center; border: 2px solid #ccc; border-radius: 5px; }
+        input:focus { border-color: #28a745; outline: none; }
+        button { font-size: 18px; padding: 12px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; font-weight: bold; }
+        button:hover { background-color: #218838; }
+        h2 { color: #333; text-align: center; }
+        #resultado { margin-top: 20px; font-size: 24px; color: #d9534f; text-align: center; }
+        .dica { font-size: 14px; color: #666; margin-top: -10px; margin-bottom: 20px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Descobrir dígito apagado</h2>
+        <p class="dica">Digite os números e use a letra <b>X</b> na posição exata do número que está apagado.</p>
+        
+        <input type="text" id="cartao" maxlength="19" placeholder="0000 0000 0000 0000" oninput="formatarCartao(this)">
+        
+        <button onclick="calcular()">Verificar X</button>
+        <h2 id="resultado"></h2>
+    </div>
+
+    <script>
+        // Função que agrupa os números de 4 em 4 enquanto você digita
+        function formatarCartao(input) {
+            // Remove tudo que não for número ou a letra X
+            let valorLimpo = input.value.toUpperCase().replace(/[^0-9X]/g, '');
+            
+            // Separa em blocos de 4 caracteres e junta com um espaço
+            let formatado = valorLimpo.match(/.{1,4}/g);
+            input.value = formatado ? formatado.join(' ') : '';
+        }
+
+        // Função do algoritmo
+        function calcular() {
+            // Pega o valor digitado e remove os espaços para a matemática funcionar
+            let cartao = document.getElementById("cartao").value.toUpperCase().replace(/\s/g, '');
+            
+            let quantidadeX = (cartao.match(/X/g) || []).length;
+            
+            if (cartao.length !== 16 || quantidadeX !== 1) {
+                document.getElementById("resultado").innerText = "Erro: Digite 15 números e um 'X'.";
+                document.getElementById("resultado").style.color = "#d9534f";
+                return;
+            }
+
+            for (let x = 0; x <= 9; x++) {
+                let testeCartao = cartao.replace("X", x);
+                let soma = 0;
+                let pesos = [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1];
+                
+                for (let i = 0; i < 16; i++) {
+                    let digito = parseInt(testeCartao[i]);
+                    let produto = digito * pesos[i];
+                    if (produto > 9) produto -= 9;
+                    soma += produto;
+                }
+
+                if (soma % 10 === 0) {
+                    document.getElementById("resultado").innerText = "O número apagado é o: " + x;
+                    document.getElementById("resultado").style.color = "#28a745";
+                    return;
+                }
+            }
+            document.getElementById("resultado").innerText = "Não foi possível validar.";
+        }
+    </script>
+</body>
+</html>
